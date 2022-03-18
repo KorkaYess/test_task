@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Post, Like
+from .permissions import IsOwner
 from .serializer import (
     RegisterSerializer, UserSerializer,
     PostSerializer, LikeSerializer
@@ -41,14 +42,14 @@ class PostApi(generics.ListAPIView):
 
 
 class PostUpdateApi(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 
 class PostDeleteApi(generics.DestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -75,7 +76,7 @@ class LikeCreateApi(generics.CreateAPIView):
 
 
 class LikeDeleteApi(generics.DestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
