@@ -29,6 +29,10 @@ class Like(SoftDeleteObject, models.Model):
     user = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE, editable=False)
     post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE, editable=False)
 
+    class Meta:
+        unique_together = ['user', 'post', 'value']
+
+
     def __str__(self):
         return f'{self.user.username}  {self.like_or_dislike()}  {self.post}'
 
