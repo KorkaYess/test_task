@@ -40,11 +40,15 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['title', 'description', 'tags']
+        fields = ['id', 'user', 'title', 'description', 'tags']
 
 
 class LikeSerializer(serializers.ModelSerializer):
+    post = serializers.PrimaryKeyRelatedField(
+        many=False,
+        queryset=Post.objects.all()
+    )
 
     class Meta:
         model = Like
-        fields = ['value', 'post']
+        fields = ['id', 'user', 'value', 'post']

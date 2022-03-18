@@ -1,5 +1,6 @@
-from rest_framework import generics, permissions, mixins
+from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Post, Like
 from .serializer import (
@@ -23,6 +24,8 @@ class RegisterApi(generics.GenericAPIView):
 
 
 class PostCreateApi(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -30,19 +33,56 @@ class PostCreateApi(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class PostUpdateApi(generics.RetrieveUpdateAPIView):
+class PostApi(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostUpdateApi(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostDeleteApi(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 
 class LikeCreateApi(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
+
+    def create(self, request, *args, **kwargs):
+        if like_obj := Like.objects.filter(
+            value=(1 - request.data['value']),
+            post_id=request.data["post"],
+            user=request.user
+        ):
+            like_obj.delete()
+
+        return super(LikeCreateApi, self).create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
-class LikeUpdateApi(generics.RetrieveUpdateAPIView):
+class LikeDeleteApi(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+
+class LikeApi(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
