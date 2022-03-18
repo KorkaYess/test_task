@@ -1,3 +1,5 @@
+import django_filters
+
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -35,7 +37,7 @@ class PostCreateApi(generics.CreateAPIView):
 
 
 class PostApi(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -82,8 +84,19 @@ class LikeDeleteApi(generics.DestroyAPIView):
     serializer_class = LikeSerializer
 
 
+class LikeFilter(django_filters.FilterSet):
+    date = django_filters.DateFilter(field_name='created_at', lookup_expr='date')
+    date_from = django_filters.DateFilter(field_name='created_at', lookup_expr='date__gt')
+    date_to = django_filters.DateFilter(field_name='created_at', lookup_expr='date__lt')
+
+    class Meta:
+        model = Like
+        fields = []
+
+
 class LikeApi(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
+    filter_class = LikeFilter

@@ -23,6 +23,6 @@ urlpatterns = [
     path('delete-post/<int:pk>', PostDeleteApi.as_view()),
 
     path('create-like', LikeCreateApi.as_view()),
-    path('likes', LikeApi.as_view()),
+    path('likes/analytics/', LikeApi.as_view()),
     path('delete-like/<int:pk>', LikeDeleteApi.as_view()),
 ]
