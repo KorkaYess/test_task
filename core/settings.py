@@ -45,7 +45,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'api.middleware.UpdateUserActivityMiddleware',
 ]
+
+AUTH_USER_MODEL = 'api.User'
 
 ROOT_URLCONF = 'core.urls'
 

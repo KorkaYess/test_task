@@ -1,8 +1,13 @@
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 from softdelete.models import SoftDeleteObject
+
+
+class User(AbstractUser):
+    login_IP = models.GenericIPAddressField(null=True, blank=True)
+    last_activity = models.DateTimeField(null=True, blank=True)
 
 
 class Post(models.Model):
