@@ -4,10 +4,11 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Post, Like
+from .models import Post, Like, User
 from .permissions import IsOwner
 from .serializer import (
-    RegisterSerializer, UserSerializer,
+    RegisterSerializer,
+    UserSerializer, UserActivitySerializer,
     PostSerializer, LikeSerializer
 )
 
@@ -85,6 +86,14 @@ class LikeDeleteApi(generics.DestroyAPIView):
 
 
 class LikeFilter(django_filters.FilterSet):
+
+    LIKE_CHOICES = (
+        (1, 'Like'),
+        (0, 'Dislike'),
+        ('', 'Any'),
+    )
+
+    value = django_filters.ChoiceFilter(choices=LIKE_CHOICES)
     date = django_filters.DateFilter(field_name='created_at', lookup_expr='date')
     date_from = django_filters.DateFilter(field_name='created_at', lookup_expr='date__gt')
     date_to = django_filters.DateFilter(field_name='created_at', lookup_expr='date__lt')
@@ -100,3 +109,8 @@ class LikeApi(generics.ListAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
     filter_class = LikeFilter
+
+
+class UserActivityApi(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserActivitySerializer

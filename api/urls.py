@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from .api import (
-    RegisterApi,
+    RegisterApi, UserActivityApi,
     PostCreateApi, PostUpdateApi, PostDeleteApi, PostApi,
     LikeCreateApi, LikeDeleteApi, LikeApi
 )
@@ -16,6 +16,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     path('register', RegisterApi.as_view()),
+    path('user_activity/<int:pk>', UserActivityApi.as_view()),
 
     path('create-post', PostCreateApi.as_view()),
     path('posts', PostApi.as_view()),
