@@ -14,7 +14,7 @@ class UpdateUserActivityMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.method == 'POST':
+        if request.path == '/api/token/' and request.method == 'POST':
             data = json.loads(request.body)
 
         response = self.get_response(request)

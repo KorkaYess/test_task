@@ -66,7 +66,7 @@ class LikeCreateApi(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         if like_obj := Like.objects.filter(
-            value=(1 - request.data['value']),
+            value=(1 - request.data['value']),  # revert value (to 0 if 1 and back)
             post_id=request.data["post"],
             user=request.user
         ):
